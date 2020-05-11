@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Home {% endblock %} {% block main %}
+<div class="row align-items-center">
+
+    <div class="col align-self-center col-4 offset-4 my-3">
+
+        <h1 class="text-center">FAÇA O SEU CADASTRO</h1>
+
+        <form id="novo-usuario-form" method="POST">
+            {% csrf_token %} {% include 'parciais/_messages.html' %}
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="nome" name="nome" value="{{request.POST.nome}}" placeholder="NOME" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="sobrenome" name="sobrenome" value="{{request.POST.sobrenome}}" placeholder="SOBRENOME" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="usuario" name="usuario" value="{{request.POST.usuario}}" placeholder="USUÁRIO" minlength="6" autocomplete="off" required>
+                        <div class="invalid-feedback" id="usuario-feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control" type="password" id="senha" name="senha" placeholder="SENHA" autocomplete="off" minlength="8" required>
+                        <div class="invalid-feedback" id="senha-feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control" type="password" id="senha_repetida" name="senha_repetida" placeholder="CONFIRMAR SENHA" autocomplete="off" minlength="8" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                <button class="btn btn-primary btn-lg btn-block p-0 my-3" type="submit"><p class="d-inline" style="font-size: 40px;">REGISTRAR</p></button>
+                <a class="btn btn-sm btn-secondary" href="{% url 'login' %}">CANCELAR</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'assets/registrar_validacao.js' %}"></script>
+
+{% endblock %}

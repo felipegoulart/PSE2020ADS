@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block main %}
+
+<div class="row align-items-center my-5">
+
+    <div class="col-sm" style="padding: 2% 6%;">
+        <img class="img-fluid" src="{% static 'img/imagem_login.png' %}">
+    </div>
+
+    <div class="col-sm" style="padding: 0% 15%;">
+
+        <h1 class="text-center">PESQUISA SOCIOECONÔMICA FATEC FRANCA</h1>
+        
+        <form method="POST">
+
+            {% csrf_token %}
+            
+            {% include 'parciais/_messages.html' %}
+
+            <div class="form-group">
+                <input type="text" name="usuario" class="form-control" placeholder="USUÁRIO"
+                    value="{{request.POST.usuario}}" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="senha" placeholder="SENHA"
+                    required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg btn-block p-0"><p class="d-inline" style="font-size: 40px;">LOGIN</p> </button>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-around">
+            <a class="btn btn-sm btn-secondary" href="{% url 'registrar' %}">REGISTRAR</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'recuperar_senha' %}">ESQUECI A SENHA</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

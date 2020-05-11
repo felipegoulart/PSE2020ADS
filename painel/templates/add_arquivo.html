@@ -1,0 +1,18 @@
+{% include 'base.html' %}
+
+{% block main %}
+    <div class="row align-items-center">
+        <div class="col align-self-center col-4 offset-4 my-3">
+            <form action="{% url 'adicionar' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% include 'parciais/_messages.html' %}
+
+                <input type="text" name="nome" placeholder="Dê um nome para o arquivo">
+                <input type="file" name="arquivo">
+                <button type='submit'>Salvar</button>
+                <a href="{% url 'painel' %}"><button type='button'>Voltar</button></a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

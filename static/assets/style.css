@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Soft Bold';
+    src: url(font/MADE\ Tommy\ Soft\ Bold\ PERSONAL\ USE.otf);
+}
+
+h1, button, a, input {
+    font-family: 'Soft Bold';
+}
+
+.tela_arquivos {
+    max-width: 50px;
+    display: inline-flexbox;
+    border: dashed 2px #6b44b8
+}

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-from painel.dash_app import SimpleExemple
+from painel.dash_app import Dash
 
 urlpatterns = [
     path('', painel, name='painel'),

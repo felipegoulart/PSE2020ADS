@@ -8,6 +8,7 @@ from django.contrib import messages
 from login import views
 from .models import Arquivos
 from .forms import ArquivosForm
+from .dash_app.Dash import grafico
 
 
 @login_required(login_url='login')
@@ -50,7 +51,7 @@ def add_arquivos(request):
 @login_required(login_url='login')
 def dash(request, id):
     arquivo = Arquivos.objects.get(id= id)
-    print(arquivo.nome)
+    grafico(arquivo)
     return render(request, 'dash.html', {'arquivo' : arquivo})
 
 

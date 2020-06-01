@@ -4,5 +4,5 @@ from django.conf import settings
 
 class Arquivos(models.Model):
     nome = models.CharField(max_length=20, null= True, blank= True)
-    arquivos = models.FileField(upload_to='csv')
+    arquivos = models.FileField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False,  null= True, blank= True)

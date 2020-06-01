@@ -26,6 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'dpd_static_support',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'channels',
+    'pandas',
+
     'painel',
     'login',
 ]
@@ -37,6 +43,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'django_plotly_dash.middleware.BaseMiddleware',
+    'django_plotly_dash.middleware.ExternalRedirectionMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -45,7 +55,7 @@ ROOT_URLCONF = 'PSE.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -58,7 +68,11 @@ TEMPLATES = [
     },
 ]
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 WSGI_APPLICATION = 'PSE.wsgi.application'
+
+ASGI_APPLICATION = 'PSE.routing.application'
 
 
 # Database
@@ -113,9 +127,9 @@ STATICFILES_DIRS = [
     'static'
 ]
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'painel/csv/'
 
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = 'painel/csv'
 
 #Mensagens
 MESSAGE_TAGS = {
@@ -123,3 +137,32 @@ MESSAGE_TAGS = {
     constants.SUCCESS: 'alert-success',
     constants.WARNING: 'alert-warning',
 }
+
+#Configuração Plotly Dash
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379),],
+        },
+    },
+}
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+    'django_plotly_dash.finders.DashAssetFinder',
+    'django_plotly_dash.finders.DashComponentFinder',
+    'django_plotly_dash.finders.DashAppDirectoryFinder',
+]
+
+PLOTLY_COMPONENTS = [
+    'dash_core_components',
+    'dash_html_components',
+    'dash_renderer',
+    'dpd_components',
+    'dpd_static_support',
+]

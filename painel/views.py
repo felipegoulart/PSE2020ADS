@@ -8,7 +8,8 @@ from django.contrib import messages
 from login import views
 from .models import Arquivos
 from .forms import ArquivosForm
-from .dash_app.graficos import NomeArquivo
+
+from .dash_app.graficos import Graficos
 
 
 @login_required(login_url='login')
@@ -33,6 +34,16 @@ def add_arquivos(request):
             return render(request, 'add_arquivo.html')
 
         else:
+            if ' ' in nome:
+                temp = []
+                for j in nome:
+                    i = nome.index(j)
+                    temp.extend(j)
+                    if j == ' ':
+                        temp[i] = '_'
+                nome = ''
+                for i in temp:
+                    nome += i
 
             if arq.name[-3:] == 'csv':
                 arq.name = nome + '.csv'
@@ -51,7 +62,7 @@ def add_arquivos(request):
 @login_required(login_url='login')
 def dash(request, id):
     arquivo = Arquivos.objects.get(id= id)
-    NomeArquivo(arquivo)
+    Graficos(arquivo)
     return render(request, 'dash.html', {'arquivo' : arquivo})
 
 

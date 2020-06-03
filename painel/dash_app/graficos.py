@@ -7,58 +7,69 @@ from django_plotly_dash import DjangoDash
 import pandas as pd 
 import os
 
+from .listas import nome_graficos
+
+app = DjangoDash('graficos')
 #Importa arquivos
-def importa_arquivo(nome_arquivo):
-    dados = pd.read_csv(os.path.join(r"painel\csv\{}".format(nome_arquivo.nome + '.csv')), sep = ',', error_bad_lines = False)
-    df = df.drop(columns = ['Carimbo de data/hora','1 - Qual o seu RA?', '41 - Escreva em algumas linhas sobre sua história e seus sonhos de vida.'])
+
+def Graficos(nome_arquivo):
+    df = pd.read_csv(os.path.join(r"painel\csv\{}".format(nome_arquivo.nome + '.csv')), sep = ',', error_bad_lines = False)
+    tabela = df.drop(columns = ['Carimbo de data/hora','1 - Qual o seu RA?', '41 - Escreva em algumas linhas sobre sua história e seus sonhos de vida.'])
     
-    return df
+    # Retorna os valores para a criação dos menus DROPDOWN
+    def dropdown_periodo(tabela):
+        lista_periodo = tabela['3 - Qual o período em que cursa?']
+        itens_dropdown = list(set(lista_periodo))
 
-perguntas = df.columns
+        if len(itens_dropdown) > 1:
+            itens_dropdown.append('Todos')
+            itens_dropdown.sort(reverse=True)
+            menu_periodo = [{'label' : itens_dropdown[i].upper(), 'value' : itens_dropdown[i].lower()}
+                            for i in range(len(itens_dropdown))]
 
-pergunta = '24 - Qual o seu conhecimento em relações aos aplicativos a seguir?   [Sistemas de Gestão Empresarial]'
+        else:
+            menu_periodo = [{'label' : itens_dropdown[0].upper(), 'value' : itens_dropdown[0].lower()}]
 
-#Cria a lista com dicionários de perguntas e respostas
-def cria_questoes(df):
-    dic = []
-    dff = {}
-    for items in df:
-        dic = (dict(df.groupby(by= items).size()))
-        dff[items] = dic
-    
-    return dff
+        return menu_periodo
 
-def retorna_valores_grafico(pergunta, df):
-    questoes = cria_questoes(df)
+    perguntas = tabela.columns
+    menu_graficos = [{'label' : str(perguntas[i]), 'value' : str(nome_graficos[i])} for i in range(len(nome_graficos))]
 
-    chave = []
-    valor = []
+    pergunta = '24 - Qual o seu conhecimento em relações aos aplicativos a seguir?   [Sistemas de Gestão Empresarial]'
 
-    chave.extend(list(questoes[pergunta].keys()))
-    valor.extend(list(questoes[pergunta].values()))
-
-    return chave, valor
-
-x, y = retorna_valores_grafico(pergunta, df)
-
-
-    app.layout = html.Div(style={'columnCount': 1}, children = [
-        html.Label('Periodo'),
+    #Cria a lista com dicionários de perguntas e respostas
+    def cria_questoes(df):
+        dic = []
+        dff = {}
+        for items in df:
+            dic = (dict(df.groupby(by= items).size()))
+            dff[items] = dic
         
+        return dff
+
+    def retorna_valores_grafico(pergunta, df):
+        questoes = cria_questoes(df)
+
+        chave = []
+        valor = []
+
+        chave.extend(list(questoes[pergunta].keys()))
+        valor.extend(list(questoes[pergunta].values()))
+
+        return chave, valor
+
+    #x, y = retorna_valores_grafico(pergunta, tabela)  parametros para chamar a função
+
+    app.layout = html.Div(style = {'heigth' : '150px', 'position' : 'relative'}, children=[ 
         dcc.Dropdown(
-            id = "lista_selecao",
-            options=[
-                {'label': 'Noturno', 'value': 'noite'},
-                {'label': u'Matutino', 'value': 'dia'},
-                {'label': u'Todos', 'value': 'global'},
-            ],
-            value='global'
+            
+            id = "menu_periodo",
+            options= dropdown_periodo(tabela),
+            value='todos'
         ),
-        html.Div(id="saida"),
+    ],className = 'teste')
 
-    ])
-
-
+'''
     def dados_grafico(df): 
         dic = dict((df.groupby(by = 'Cidade onde mora').size()))
         ch = list(dic.keys())
@@ -84,5 +95,5 @@ x, y = retorna_valores_grafico(pergunta, df)
             figure = {
             'data': [{'x': x, 'y': y, 'type': 'bar', 'name': 'SF'}],
         }
-    )
+    )'''
 

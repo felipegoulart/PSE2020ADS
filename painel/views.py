@@ -35,15 +35,10 @@ def add_arquivos(request):
 
         else:
             if ' ' in nome:
-                temp = []
-                for j in nome:
-                    i = nome.index(j)
-                    temp.extend(j)
-                    if j == ' ':
-                        temp[i] = '_'
-                nome = ''
-                for i in temp:
-                    nome += i
+                nome = nome.replace(' ', '_')
+                nome = nome.strip('_')
+                while '__' in nome:
+                    nome = nome.replace('__', '_')
 
             if arq.name[-3:] == 'csv':
                 arq.name = nome + '.csv'

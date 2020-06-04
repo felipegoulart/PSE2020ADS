@@ -77,3 +77,39 @@ nome_graficos = [
     'Fez algum curso técnico',
     'Meio de transporte utilizado para ir a faculdade'
 ]
+
+def dropdown_periodo(tabela):
+    lista_periodo = tabela['3 - Qual o período em que cursa?']
+    itens_dropdown = list(set(lista_periodo))
+
+    if len(itens_dropdown) > 1:
+        itens_dropdown.append('Todos')
+        itens_dropdown.sort(reverse=True)
+        menu_periodo = [{'label' : itens_dropdown[i].upper(), 'value' : itens_dropdown[i].lower()}
+                        for i in range(len(itens_dropdown))]
+
+    else:
+        menu_periodo = [{'label' : itens_dropdown[0].upper(), 'value' : itens_dropdown[0].lower()}]
+
+    return menu_periodo
+
+#Cria a lista com dicionários de perguntas e respostas
+def cria_questoes(df):
+    dic = []
+    dff = {}
+    for items in df:
+        dic = (dict(df.groupby(by= items).size()))
+        dff[items] = dic
+    
+    return dff
+
+def retorna_valores_grafico(pergunta, df):
+    questoes = cria_questoes(df)
+
+    chave = []
+    valor = []
+
+    chave.extend(list(questoes[pergunta].keys()))
+    valor.extend(list(questoes[pergunta].values()))
+
+    return chave, valor

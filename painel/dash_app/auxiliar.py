@@ -113,3 +113,8 @@ def retorna_valores_grafico(pergunta, df):
     valor.extend(list(questoes[pergunta].values()))
 
     return chave, valor
+
+'''def retorna_df(value):
+    if value == 'noturno':
+        df = tabela.'''
+    

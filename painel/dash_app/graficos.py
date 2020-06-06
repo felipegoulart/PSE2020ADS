@@ -19,7 +19,7 @@ def Graficos(nome_arquivo):
 
     perguntas = tabela.columns
 
-    menu_graficos = [{'label' : str(nome_graficos[i]), 'value' : str(perguntas[i])} for i in range(len(nome_graficos))]
+    menu_graficos = [{'label' : str(nome_graficos[i]), 'value' : int(i)} for i in range(len(nome_graficos))]
 
     pergunta = '24 - Qual o seu conhecimento em relações aos aplicativos a seguir?   [Sistemas de Gestão Empresarial]'
 
@@ -38,40 +38,36 @@ def Graficos(nome_arquivo):
                     id = "menu_graficos",
                     options= menu_graficos,
                     value= perguntas[1]
-                )
+                ),
+                
+                dcc.Graph(id = 'grafico')
+        
             ],
             className = 'teste',
-            style = {'columnCount': 2, "display": "inline"})
-        ])
-    '''html.Div(
-        [dcc.Graph(id='grafico')
-    ])'''
-
-'''
-    def dados_grafico(df): 
-        dic = dict((df.groupby(by = 'Cidade onde mora').size()))
-        ch = list(dic.keys())
-        vl = list(dic.values())
-        return ch, vl
-
-
+            style = {'columnCount': 2, "display": "inline", 'height': '1000px'})
+        ]
+            
+        )
 
     @app.callback(
-        Output('saida','children'),
-        [Input('lista_selecao', 'value')]
+        Output('grafico','figure'),
+        [Input('menu_periodo', 'value'),
+        Input('menu_graficos', 'value')]
     )
 
-    def saida_update (value):
-        if value == "noite":  
-            x, y = dados_grafico(df_noite)
-        elif value == "dia":
-            x, y = dados_grafico(df_dia)
-        elif value == "global":
-            x, y = dados_grafico(dados)
-        return dcc.Graph(
-            id='plot_graph',
-            figure = {
-            'data': [{'x': x, 'y': y, 'type': 'bar', 'name': 'SF'}],
-        }
-    )'''
-
+    
+    def retorna_grafico (menu_periodo, menu_graficos):
+        i = int(menu_graficos)
+        pergunta = perg[i]
+        x, y = retorna_valores_grafico(pergunta, tabela)
+        return html.Div(
+                    [dcc.Graph(
+                        id = 'grafico',
+                        figure = {
+                            'data': [{ 'x': x, 'y': y, 'type': 'bar'}]
+                            }
+                    )]
+                )
+    perg = []
+    for item in tabela:
+        perg.append(item)

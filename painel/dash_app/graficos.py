@@ -41,7 +41,7 @@ def Graficos(nome_arquivo):
                 )
             ],
             className = 'teste',
-            style = {'columnCount': 2, "display": "inline"})
+            style = {'columnCount': 2})
         ])
     '''html.Div(
         [dcc.Graph(id='grafico')

@@ -12,3 +12,7 @@ h1, button, a, input {
     display: inline-flexbox;
     border: dashed 2px #6b44b8
 }
+
+.teste {
+    background-color: blueviolet;
+}

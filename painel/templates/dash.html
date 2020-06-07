@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load static %}
 {% block main %}
 
@@ -12,15 +12,8 @@
         <h1 class="text-center align-self-center">PESQUISA SOCIOECONÔMICA FATEC FRANCA</h1>
     </div>
     <div class="col align-self-center">
-        <div class="mx-auto" style="width: 100px;">
-            MENU <i class="fas fa-bars" style="font-size: 40px; color: purple;"></i>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        <h1 class="text-center" style="border: solid purple 2px; border-style: dashed; padding: 100px; color: grey;">Gráficos</h1>
+        <a href="{% url 'logout' %}" type="button" class="btn btn-sm btn-secondary px-4">Sair</a>
+        <a href="{% url 'painel' %}" type="button" class="btn btn-sm btn-secondary px-4">Voltar</a>
     </div>
 </div>
 
@@ -37,5 +30,5 @@
     {% endif %}
 </ul>
 
-{% endfor %} 
+{% endfor %}
 {% endblock %}

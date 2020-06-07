@@ -1,20 +1,44 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load static %}
 {% block main %}
-    <a href="{% url 'logout' %}" type="button" class="btn btn-primary">Sair</a>
-    <a href="{% url 'adicionar' %}" type="button" class="btn btn-primary">Adicionar Pesquisa</a>
-    <ul style="max-width: 500px; display: block;">
-        {% for arq in arquivos_nomes %}
-            {% if arq.user_id == request.user.id %}
 
-                <li style="display: flexbox; padding: 5px; width: 100%; height: 50px; margin:1%; border: dashed 2px #6b44b8; list-style: none;">
-                    <img src="{% static 'img/grafico_ico.svg' %}" style="max-width: 3%;">
-                    <p style="display: inline; font-family: 'Soft Bold';">{{ arq.nome }}</p>
-                    <a  href="{% url 'dash' arq.id %}"><img src="{% static 'img/abrir.svg' %}" style="max-width: 4%;"></a>
-                    <a href=" {% url 'deletar' arq.id %}"><img src="{% static 'img/deletar.svg' %}" style="max-width: 3%;"></a>
-                </li>
 
-            {% endif %}
-        {% endfor %}
-    </ul>
+<div class="d-flex flex-row-reverse bd-highlight my-3">
+    <div class="p-2 bd-highlight">
+        <a href="{% url 'logout' %}" type="button" class="btn btn-sm btn-secondary px-4">Sair</a>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <a href="{% url 'adicionar' %}" type="button" class="btn btn-primary btn-lg">SUBIR NOVO ARQUIVO</a>
+</div>
+
+
+{% for arq in arquivos_nomes %}
+
+{% if arq.user_id == request.user.id %}
+
+
+<div class="d-flex justify-content-center my-2">
+    
+    <div style="border: dashed 2px grey; min-width: 300px; text-transform: uppercase;" class="p-2 d-flex justify-content-between">
+        
+        <div>
+            <img src="{% static 'img/grafico_ico.svg' %}" class="img-fluid mr-2" width="20px">
+            <p style="display: inline; font-family: 'Soft Bold'; color: #6b44b8;;">{{ arq.nome }}</p>
+        </div>
+        <div>
+            <a href="{% url 'dash' arq.id %}"><img src="{% static 'img/abrir.svg' %}" width="25px" title="Dashboard"></a>
+            <a href=" {% url 'deletar' arq.id %}"><img src="{% static 'img/deletar.svg' %}" width="20px" title="Excluir"></a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+
 {% endblock %}

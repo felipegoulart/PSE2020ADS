@@ -96,17 +96,36 @@ def dropdown_periodo(tabela):
     return menu_periodo
 
 #Cria a lista com dicionários de perguntas e respostas
-def cria_questoes(tabela, pergunta):
+def cria_questoes(tabela, pergunta, periodo):
+    df = retorna_df(tabela, periodo)
     respostas = []
     pergunta_respostas = {}
-    respostas = (dict(tabela.groupby(by= pergunta).size()))
+    respostas = (dict(df.groupby(by= pergunta).size()))
     pergunta_respostas[pergunta] = respostas
 
     return pergunta_respostas
 
-def faixa_etaria(tabela, pergunta):
-    pergunta_respostas = {}
+def retorna_valores_grafico(pergunta, df, periodo):
+    questoes = cria_questoes(df, pergunta, periodo)
+
+    chave = []
+    valor = []
     
+    chave.extend(list(questoes[pergunta].keys()))
+    valor.extend(list(questoes[pergunta].values()))
+
+    return chave, valor
+
+def retorna_df (df, periodo):
+    if periodo == 'Todos':
+        df = df
+    else:
+        x = df['3 - Qual o período em que cursa?'] == periodo.title()
+        df = df[x]
+    return df
+
+def faixa_etaria(tabela, pergunta):
+    pergunta_respostas = {}    
     anos = list(tabela[pergunta])
     data_atual = datetime.now()
     dicio_faixa_etaria = {
@@ -135,22 +154,22 @@ def faixa_etaria(tabela, pergunta):
         
     pergunta_respostas[pergunta] = dicio_faixa_etaria
 
-def retorna_valores_grafico(pergunta, df, periodo):
-    questoes = cria_questoes(df, pergunta, periodo)
+    return pergunta_respostas
 
-    chave = []
-    valor = []
+def filtro(periodo_selecionado, pergunta_selecionada, tabela):
+    periodo = []
     
-    chave.extend(list(questoes[pergunta].keys()))
-    valor.extend(list(questoes[pergunta].values()))
+    if periodo_selecionado == 'Todos':
+        periodo.extend(periodo_selecionado)
+        pergunta = pergunta_selecionada
+        dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
+        selecionado = dff[pergunta]
 
-    return chave, valor
-
-def retorna_df (df, periodo):
-    if periodo == 'todos':
-        df = df
     else:
-        x = df['3 - Qual o período em que cursa?'] == periodo.title()
-        df = df[x]
-    return df
+        periodo.append(periodo_selecionado)
+        print (periodo)
+        pergunta = pergunta_selecionada
+        dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
+        selecionado = dff[pergunta]
     
+    return selecionado

@@ -16,6 +16,8 @@ app = DjangoDash('graficos')
 def Graficos(nome_arquivo):
     df = pd.read_csv(os.path.join(r"painel\csv\{}".format(nome_arquivo.nome + '.csv')), sep = ',', error_bad_lines = False)
     tabela = df.drop(columns = ['Carimbo de data/hora','1 - Qual o seu RA?', '41 - Escreva em algumas linhas sobre sua história e seus sonhos de vida.'])
+    tabela = df.drop(57)
+    
     perg = []
     for item in tabela:
         perg.append(item)
@@ -48,14 +50,13 @@ def Graficos(nome_arquivo):
                 className = 'teste',
                 style = {'columnCount': 2}
                 ),
-
-            html.Div(
-                [
-                    dcc.Graph(id= "grafico")
-                ]
-            )
-        ]
-        )
+                html.Div(
+                    [
+                        dcc.Graph(id = 'grafico')
+                    ]
+                )
+            ]
+    )
 
     @app.callback(
         Output('grafico','figure'),

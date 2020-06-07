@@ -96,7 +96,6 @@ def dropdown_periodo(tabela):
     return menu_periodo
 
 #Cria a lista com dicionários de perguntas e respostas
-<<<<<<< HEAD
 def cria_questoes(tabela, pergunta):
     respostas = []
     pergunta_respostas = {}
@@ -107,14 +106,6 @@ def cria_questoes(tabela, pergunta):
 
 def faixa_etaria(tabela, pergunta):
     pergunta_respostas = {}
-=======
-def cria_questoes(df, quest, periodo):
-    df = retorna_df(df, periodo)
-    dic = []
-    dff = {}
-    dic = (dict(df.groupby(by= quest).size()))
-    dff[quest] = dic
->>>>>>> 732ab7211d0afdff9b51e9799e7a08d953a82e0b
     
     anos = list(tabela[pergunta])
     data_atual = datetime.now()
@@ -155,9 +146,6 @@ def retorna_valores_grafico(pergunta, df, periodo):
 
     return chave, valor
 
-<<<<<<< HEAD
-
-=======
 def retorna_df (df, periodo):
     if periodo == 'todos':
         df = df
@@ -166,4 +154,3 @@ def retorna_df (df, periodo):
         df = df[x]
     return df
     
->>>>>>> 732ab7211d0afdff9b51e9799e7a08d953a82e0b

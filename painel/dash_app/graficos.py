@@ -8,7 +8,7 @@ import pandas as pd
 import os
 
 #importa as funções para maior organização do código
-from .auxiliar import nome_graficos, dropdown_periodo, cria_questoes, retorna_valores_grafico
+from .auxiliar import nome_graficos, dropdown_periodo, cria_questoes, retorna_valores_grafico, faixa_etaria
 
 app = DjangoDash('graficos')
 #Importa arquivos
@@ -39,7 +39,7 @@ def Graficos(nome_arquivo):
                     dcc.Dropdown(
                         id = "menu_periodo",
                         options= dropdown_periodo(tabela),
-                        value='todos'
+                        value='Todos'
                     ),
                     dcc.Dropdown(
                         id = "menu_graficos",
@@ -50,12 +50,13 @@ def Graficos(nome_arquivo):
                 className = 'teste',
                 style = {'columnCount': 2}
                 ),
-
-    def dados_grafico(df): 
-        dic = dict((df.groupby(by = 'Cidade onde mora').size()))
-        ch = list(dic.keys())
-        vl = list(dic.values())
-        return ch, vl
+                html.Div(
+                    [
+                        dcc.Graph(id='grafico')
+                    ]
+                )
+            ]
+    )
 
     @app.callback(
         Output('grafico','figure'),
@@ -68,7 +69,8 @@ def Graficos(nome_arquivo):
         x, y = retorna_valores_grafico(per, tabela, menu_periodo)
         data = [
             dict(
-                type = 'pie',
+                type = 'bar',
+                orientation = 'h',
                 name = 'gr',
                 labels = x,
                 values = y,

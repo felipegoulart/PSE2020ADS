@@ -121,4 +121,5 @@ def retorna_df (df, periodo):
         x = df['3 - Qual o período em que cursa?'] == periodo.title()
         df = df[x]
     return df
+
     

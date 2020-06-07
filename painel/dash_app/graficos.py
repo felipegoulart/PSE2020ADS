@@ -31,20 +31,23 @@ def Graficos(nome_arquivo):
     #x, y = retorna_valores_grafico(pergunta, tabela)  parametros para chamar a função
 
     app.layout = html.Div(
-            [ html.Div(
-                [dcc.Dropdown(
+            [
+                html.Div(
+                [
+                    dcc.Dropdown(
                         id = "menu_periodo",
                         options= dropdown_periodo(tabela),
                         value='todos'
+                    ),
+                    dcc.Dropdown(
+                        id = "menu_graficos",
+                        options= menu_graficos,
+                        value= perguntas[1]
+                    ),        
+                ],
+                className = 'teste',
+                style = {'columnCount': 2}
                 ),
-                dcc.Dropdown(
-                    id = "menu_graficos",
-                    options= menu_graficos,
-                    value= perg[1]
-                ),        
-            ],
-            className = 'teste',
-            style = {'columnCount': 2}),
 
             html.Div(
                 [
@@ -52,16 +55,13 @@ def Graficos(nome_arquivo):
                 ]
             )
         ]
-            
         )
 
     @app.callback(
         Output('grafico','figure'),
         [Input('menu_periodo', 'value'),
         Input('menu_graficos', 'value')]
-    )
-
-    
+    )   
     def retorna_grafico (menu_periodo, menu_graficos):
         i = perg.index(menu_graficos)
         per = perg[i]

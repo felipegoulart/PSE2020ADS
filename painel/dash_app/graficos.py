@@ -17,10 +17,14 @@ def Graficos(nome_arquivo):
     df = pd.read_csv(os.path.join(r"painel\csv\{}".format(nome_arquivo.nome + '.csv')), sep = ',', error_bad_lines = False)
     tabela = df.drop(columns = ['Carimbo de data/hora','1 - Qual o seu RA?', '41 - Escreva em algumas linhas sobre sua história e seus sonhos de vida.'])
     tabela = df.drop(57)
+    
+    perg = []
+    for item in tabela:
+        perg.append(item)
 
     perguntas = tabela.columns
 
-    menu_graficos = [{'label' : str(nome_graficos[i]), 'value' : int(i)} for i in range(len(nome_graficos))]
+    menu_graficos = [{'label' : str(nome_graficos[i]), 'value' : str(perg[i]) } for i in range(len(nome_graficos))]
 
     pergunta = '24 - Qual o seu conhecimento em relações aos aplicativos a seguir?   [Sistemas de Gestão Empresarial]'
 
@@ -46,13 +50,8 @@ def Graficos(nome_arquivo):
                 className = 'teste',
                 style = {'columnCount': 2}
                 ),
-                html.Div(
-                    [
-                        dcc.Graph(id = 'grafico')
-                ])
-            ])
 
-    '''def dados_grafico(df): 
+    def dados_grafico(df): 
         dic = dict((df.groupby(by = 'Cidade onde mora').size()))
         ch = list(dic.keys())
         vl = list(dic.values())
@@ -64,17 +63,18 @@ def Graficos(nome_arquivo):
         Input('menu_graficos', 'value')]
     )   
     def retorna_grafico (menu_periodo, menu_graficos):
-        i = int(menu_graficos)
-        pergunta = perg[i]
-        x, y = retorna_valores_grafico(pergunta, tabela)
-        return html.Div(
-                    [dcc.Graph(
-                        id = 'grafico',
-                        figure = {
-                            'data': [{ 'x': x, 'y': y, 'type': 'bar'}]
-                            }
-                    )]
-                )
-    perg = []
-    for item in tabela:
-        perg.append(item)'''
+        i = perg.index(menu_graficos)
+        per = perg[i]
+        x, y = retorna_valores_grafico(per, tabela, menu_periodo)
+        data = [
+            dict(
+                type = 'pie',
+                name = 'gr',
+                labels = x,
+                values = y,
+                direction = 'clockwise'     
+            )
+        ]
+        figura = dict(data = data)
+        return figura
+        

@@ -97,10 +97,10 @@ def dropdown_periodo(tabela):
 
 #Cria a lista com dicionários de perguntas e respostas
 def cria_questoes(tabela, pergunta, periodo):
-    df = retorna_df(df, periodo)
+    df = retorna_df(tabela, periodo)
     respostas = []
     pergunta_respostas = {}
-    respostas = (dict(tabela.groupby(by= pergunta).size()))
+    respostas = (dict(df.groupby(by= pergunta).size()))
     pergunta_respostas[pergunta] = respostas
 
     return pergunta_respostas
@@ -147,7 +147,7 @@ def retorna_valores_grafico(pergunta, df, periodo):
     return chave, valor
 
 def retorna_df (df, periodo):
-    if periodo == 'todos':
+    if periodo == 'Todos':
         df = df
     else:
         x = df['3 - Qual o período em que cursa?'] == periodo.title()

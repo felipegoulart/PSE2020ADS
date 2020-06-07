@@ -94,17 +94,17 @@ def dropdown_periodo(tabela):
     return menu_periodo
 
 #Cria a lista com dicionários de perguntas e respostas
-def cria_questoes(df):
+def cria_questoes(df, quest, periodo):
+    df = retorna_df(df, periodo)
     dic = []
     dff = {}
-    for items in df:
-        dic = (dict(df.groupby(by= items).size()))
-        dff[items] = dic
+    dic = (dict(df.groupby(by= quest).size()))
+    dff[quest] = dic
     
     return dff
 
-def retorna_valores_grafico(pergunta, df):
-    questoes = cria_questoes(df)
+def retorna_valores_grafico(pergunta, df, periodo):
+    questoes = cria_questoes(df, pergunta, periodo)
 
     chave = []
     valor = []
@@ -114,7 +114,11 @@ def retorna_valores_grafico(pergunta, df):
 
     return chave, valor
 
-'''def retorna_df(value):
-    if value == 'noturno':
-        df = tabela.'''
+def retorna_df (df, periodo):
+    if periodo == 'todos':
+        df = df
+    else:
+        x = df['3 - Qual o período em que cursa?'] == periodo.title()
+        df = df[x]
+    return df
     

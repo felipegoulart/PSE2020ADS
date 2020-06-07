@@ -70,11 +70,10 @@ def Graficos(nome_arquivo):
         x, y = retorna_valores_grafico(menu_graficos, tabela, menu_periodo)
         data = [
             dict(
-                type = 'pie',
+                type = 'bar',
                 name = 'gr',
-                labels = x,
-                values = y,
-                direction = 'clockwise'     
+                x = x,
+                y = y
             )
         ]
         figura = dict(data = data)

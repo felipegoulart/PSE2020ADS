@@ -16,6 +16,7 @@ app = DjangoDash('graficos')
 def Graficos(nome_arquivo):
     df = pd.read_csv(os.path.join(r"painel\csv\{}".format(nome_arquivo.nome + '.csv')), sep = ',', error_bad_lines = False)
     tabela = df.drop(columns = ['Carimbo de data/hora','1 - Qual o seu RA?', '41 - Escreva em algumas linhas sobre sua história e seus sonhos de vida.'])
+    tabela = df.drop(57)
 
     perguntas = tabela.columns
 
@@ -51,7 +52,7 @@ def Graficos(nome_arquivo):
                 ])
             ])
 
-    def dados_grafico(df): 
+    '''def dados_grafico(df): 
         dic = dict((df.groupby(by = 'Cidade onde mora').size()))
         ch = list(dic.keys())
         vl = list(dic.values())
@@ -76,4 +77,4 @@ def Graficos(nome_arquivo):
                 )
     perg = []
     for item in tabela:
-        perg.append(item)
+        perg.append(item)'''

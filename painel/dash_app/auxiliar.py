@@ -1,3 +1,5 @@
+from datetime import datetime
+
 #Lista com os novos nomes das tabelas
 nome_graficos = [
     'Cursos',
@@ -85,36 +87,63 @@ def dropdown_periodo(tabela):
     if len(itens_dropdown) > 1:
         itens_dropdown.append('Todos')
         itens_dropdown.sort(reverse=True)
-        menu_periodo = [{'label' : itens_dropdown[i].upper(), 'value' : itens_dropdown[i].lower()}
+        menu_periodo = [{'label' : itens_dropdown[i].upper(), 'value' : itens_dropdown[i]}
                         for i in range(len(itens_dropdown))]
 
     else:
-        menu_periodo = [{'label' : itens_dropdown[0].upper(), 'value' : itens_dropdown[0].lower()}]
+        menu_periodo = {'label' : itens_dropdown[0].upper(), 'value' : itens_dropdown[0]}
 
     return menu_periodo
 
 #Cria a lista com dicionários de perguntas e respostas
-def cria_questoes(df):
-    dic = []
-    dff = {}
-    for items in df:
-        dic = (dict(df.groupby(by= items).size()))
-        dff[items] = dic
+def cria_questoes(tabela, pergunta):
+    respostas = []
+    pergunta_respostas = {}
+    respostas = (dict(tabela.groupby(by= pergunta).size()))
+    pergunta_respostas[pergunta] = respostas
+
+    return pergunta_respostas
+
+def faixa_etaria(tabela, pergunta):
+    pergunta_respostas = {}
     
-    return dff
+    anos = list(tabela[pergunta])
+    data_atual = datetime.now()
+    dicio_faixa_etaria = {
+        'Dados inválidos' : 0,
+        '17 á 20 anos' : 0,
+        '21 á 30 anos' : 0,
+        '31 á 40 anos' : 0,
+        '41 anos ou mais' : 0
+    }
+
+    for ano in anos:
+        data_nascimento = datetime.strptime(ano, '%Y-%m-%d')
+        dias = (data_atual - data_nascimento).days
+        idade = int(dias / 364)
+
+        if idade < 17:
+            dicio_faixa_etaria['Dados inválidos'] += 1
+        elif idade >= 17 and idade <= 20:
+            dicio_faixa_etaria['17 á 20 anos'] += 1
+        elif idade >= 21 and idade <= 30:
+            dicio_faixa_etaria['21 á 30 anos'] += 1
+        elif idade >= 31 and idade <= 40:
+            dicio_faixa_etaria['31 á 40 anos'] += 1
+        else:
+            dicio_faixa_etaria['41 anos ou mais'] += 1
+        
+    pergunta_respostas[pergunta] = dicio_faixa_etaria
 
 def retorna_valores_grafico(pergunta, df):
     questoes = cria_questoes(df)
 
     chave = []
     valor = []
-
+    
     chave.extend(list(questoes[pergunta].keys()))
     valor.extend(list(questoes[pergunta].values()))
 
     return chave, valor
 
-'''def retorna_df(value):
-    if value == 'noturno':
-        df = tabela.'''
-    
+

@@ -17,8 +17,8 @@
         <a href="{% url 'painel' %}" type="button" class="btn btn-sm btn-secondary px-4">Voltar</a>
     </div>
 </div>
-<div style="height: 400px;">
-    {%plotly_app name="graficos"%}
+<div>
+    {%plotly_app_bootstrap name="graficos"  aspect="21by9"%}
 </div>
 
 {% endblock %}

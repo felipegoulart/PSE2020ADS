@@ -1,4 +1,3 @@
-from datetime import datetime
 import pandas as pd
 
 #Lista com os novos nomes das tabelas

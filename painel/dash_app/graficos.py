@@ -4,6 +4,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from django_plotly_dash import DjangoDash
 
+from datetime import datetime
 import pandas as pd 
 import os
 
@@ -30,7 +31,7 @@ def Graficos(nome_arquivo):
         if len(itens_dropdown) > 1:
             itens_dropdown.append('Todos')
             itens_dropdown.sort(reverse=True)
-            menu_periodo = [{'label' : itens_dropdown[i].upper(), 'value' : itens_dropdown[i]}
+            menu_periodo = [{'label' : itens_dropdown[i], 'value' : itens_dropdown[i]}
                             for i in range(len(itens_dropdown))]
 
         else:
@@ -51,28 +52,29 @@ def Graficos(nome_arquivo):
                     dcc.Dropdown(
                         id = "menu_periodo",
                         options= dropdown_periodo(tabela),
-                        value='Todos'
+                        value='Todos',
+                        style={
+                            'display' : 'inline-block'
+                        }
                     ),
                     dcc.Dropdown(
                         id = "menu_graficos",
                         options= menu_graficos,
-                        value= perg[1]
+                        value= perg[1],
+                        style={
+                            'display' : 'inline-block'
+                        }
                     ),        
                 ],
                 className = 'teste',
-                style = {'columnCount': 2}
+                style = {'columnCount': 2, 'display' : 'grid'}
                 ),
-
                 html.Div(
                     [
                         dcc.Graph(id = 'grafico')
-                    ]
+                    ], 
                 )
-            ], style={
-                    "height": "60px",
-                    "width": "auto",
-                    "margin-bottom": "25px",
-                },
+            ]
         )
 
     def filtro(periodo_selecionado, pergunta_selecionada, tabela):
@@ -106,7 +108,6 @@ def Graficos(nome_arquivo):
         data_atual = datetime.now()
 
         respostas = {
-            'Dados inválidos' : 0,
             '17 á 20 anos' : 0,
             '21 á 30 anos' : 0,
             '31 á 40 anos' : 0,
@@ -118,9 +119,7 @@ def Graficos(nome_arquivo):
             dias = (data_atual - data_nascimento).days
             idade = int(dias / 364)
 
-            if idade < 17:
-                respostas['Dados inválidos'] += 1
-            elif idade >= 17 and idade <= 20:
+            if idade >= 17 and idade <= 20:
                 respostas['17 á 20 anos'] += 1
             elif idade >= 21 and idade <= 30:
                 respostas['21 á 30 anos'] += 1
@@ -150,7 +149,7 @@ def Graficos(nome_arquivo):
 
     def selecao_grafico (data, numero_perg):
         x, y = retorna_valores_grafico(data)
-        if numero_perg in [2,3,4,6,9,13,17,18,19,21,22,25,26,27,31,32,36,38,39]:
+        if numero_perg in [2,3,4,6,7,9,13,17,18,19,21,22,23,25,26,27,31,32,33,36,37,38,39]:
             grafico = dict(
                     type = 'pie',
                     name = 'gr',

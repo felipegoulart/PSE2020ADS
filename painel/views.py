@@ -3,9 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
+from django.contrib import messages
+
 from login import views
 from .models import Arquivos
 from .forms import ArquivosForm
+
+from .dash_app.graficos import Graficos
 
 
 @login_required(login_url='login')
@@ -21,12 +25,20 @@ def add_arquivos(request):
         arq = request.FILES.get('arquivo')
         u = request.user
 
-        if not nome or not arq:
+        if not nome:
+            messages.add_message(request, messages.ERROR, 'Nome do arquivo OBRIGATÓRIO')
+            return render(request, 'add_arquivo.html')
 
-            messages.add_message(request, messages.ERROR, 'Nome do arqiuvo OBRIGATÓRIO')
+        elif not arq:
+            messages.add_message(request, messages.ERROR, 'Insira um ARQUIVO')
             return render(request, 'add_arquivo.html')
 
         else:
+            if ' ' in nome:
+                nome = nome.replace(' ', '_')
+                nome = nome.strip('_')
+                while '__' in nome:
+                    nome = nome.replace('__', '_')
 
             if arq.name[-3:] == 'csv':
                 arq.name = nome + '.csv'
@@ -34,6 +46,10 @@ def add_arquivos(request):
                 form.save()
 
                 return redirect('painel')
+            
+            else:
+                messages.add_message(request, messages.ERROR, 'Tipo de arquivo INVÁLIDO')
+                return render(request, 'add_arquivo.html')
 
     return render(request, 'add_arquivo.html')
 
@@ -41,8 +57,9 @@ def add_arquivos(request):
 @login_required(login_url='login')
 def dash(request, id):
     arquivo = Arquivos.objects.get(id= id)
-    print(arquivo)
+    Graficos(arquivo)
     return render(request, 'dash.html', {'arquivo' : arquivo})
+
 
 
 def logout_view(request):

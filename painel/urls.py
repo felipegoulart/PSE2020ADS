@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from painel.dash_app import graficos
 
 urlpatterns = [
     path('', painel, name='painel'),

@@ -1,7 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{%load plotly_dash%}
 {% load static %}
-{% block main %}
 
+{% block main %}
 <div class="row justify-content-center p-5">
     <div class="col align-self-center">
         <div class="mx-auto" style="width: 100px;">
@@ -16,19 +17,8 @@
         <a href="{% url 'painel' %}" type="button" class="btn btn-sm btn-secondary px-4">Voltar</a>
     </div>
 </div>
+<div style="height: 400px;">
+    {%plotly_app name="graficos"%}
+</div>
 
-<!-- <a href="{% url 'logout' %}" type="button" class="btn btn-primary">Sair</a>
-<a href="{% url 'adicionar' %}" type="button" class="btn btn-primary"><button type="button">Adicionar Pesquisa</button></a> {% for arq in arquivos_nomes %} -->
-
-<ul>
-    {% if arq.user_id == request.user.id %}
-    <li>
-        <p>{{ arq.nome }}</p>
-        <a href=" {% url 'graficos' arq.id %}">Abrir</a>
-        <a href=" {% url 'deletar' arq.id %}">Deletar</a>
-    </li>
-    {% endif %}
-</ul>
-
-{% endfor %}
 {% endblock %}

@@ -8,7 +8,7 @@ import pandas as pd
 import os
 
 #importa as funções para maior organização do código
-from .auxiliar import nome_graficos, dropdown_periodo, cria_questoes, retorna_valores_grafico, faixa_etaria
+from .auxiliar import nome_graficos, dropdown_periodo, cria_questoes, retorna_valores_grafico, faixa_etaria, filtro, selecao_grafico
 
 app = DjangoDash('graficos')
 #Importa arquivos
@@ -62,17 +62,12 @@ def Graficos(nome_arquivo):
         [Input('menu_periodo', 'value'),
         Input('menu_graficos', 'value')]
     )   
+
+
     def retorna_grafico (menu_periodo, menu_graficos):
-        i = perg.index(menu_graficos)
-        per = perg[i]
-        x, y = retorna_valores_grafico(menu_graficos, tabela, menu_periodo)
+        dados = selecao_grafico(menu_graficos,tabela,menu_periodo)
         data = [
-            dict(
-                type = 'bar',
-                name = 'gr',
-                x = x,
-                y = y
-            )
+            dados
         ]
         figura = dict(data = data)
         return figura

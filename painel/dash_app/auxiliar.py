@@ -1,4 +1,5 @@
 from datetime import datetime
+import pandas as pd
 
 #Lista com os novos nomes das tabelas
 nome_graficos = [
@@ -96,25 +97,44 @@ def dropdown_periodo(tabela):
     return menu_periodo
 
 #Cria a lista com dicionários de perguntas e respostas
-def cria_questoes(tabela, pergunta, periodo):
-    df = retorna_df(tabela, periodo)
-    respostas = []
-    pergunta_respostas = {}
-    respostas = (dict(df.groupby(by= pergunta).size()))
-    pergunta_respostas[pergunta] = respostas
+def cria_questoes(tabela,periodo,pergunta):
+    coluna = filtro(periodo , pergunta, tabela)
+    coluna = dict(coluna.groupby(by= pergunta).size())
 
-    return pergunta_respostas
+    return coluna
 
 def retorna_valores_grafico(pergunta, df, periodo):
-    questoes = cria_questoes(df, pergunta, periodo)
-
+    
+    questoes = cria_questoes(df, periodo, pergunta)
+    perg = []
+    for item in df:
+        perg.append(item)
+    elemento = perg.index(pergunta)
     chave = []
     valor = []
     
-    chave.extend(list(questoes[pergunta].keys()))
-    valor.extend(list(questoes[pergunta].values()))
+    chave.extend(list(questoes.keys()))
+    valor.extend(list(questoes.values()))
 
     return chave, valor
+
+def selecao_grafico (pergunta,df,periodo):
+    x, y = retorna_valores_grafico(pergunta,df,periodo)
+    if int(pergunta[:2]) in [2,3,4,6,9,13,17,18,19,21,22,25,26,27,31,32,36,38,39]:
+        grafico = dict(
+                type = 'pie',
+                name = 'gr',
+                labels = x,
+                values = y
+                )
+    else:
+        grafico = dict(
+                type = 'bar',
+                name = 'gr',
+                x = x,
+                y = y
+                )
+    return grafico
 
 def retorna_df (df, periodo):
     if periodo == 'Todos':
@@ -154,30 +174,32 @@ def faixa_etaria(tabela, pergunta):
         
     pergunta_respostas[pergunta] = dicio_faixa_etaria
 
-<<<<<<< HEAD
-    return pergunta_respostas
-=======
-def retorna_valores_grafico(pergunta, df, periodo):
-    p = pergunta[:2]
-    pizza = [2,3,4,6,9,13,17,18,19,21,22,25,26,27,31,32,36,38,39]
     
-    questoes = cria_questoes(df, pergunta, periodo)
->>>>>>> 44057fbe508690d55405f2a5d828829cff70efba
+    return pergunta_respostas
+
+def separar(tabela, pergunta):
+    coluna = list(tabela[pergunta])
+    respostas = []
+    for i in range(len(coluna)):
+        respostas.extend(coluna[i].split(';'))
+    df_respostas = pd.DataFrame(respostas, columns= [pergunta])
+    respostas_agrupadas = df_respostas.groupby(by = pergunta).size()
+    return respostas_agrupadas
+
 
 def filtro(periodo_selecionado, pergunta_selecionada, tabela):
     periodo = []
-    
     if periodo_selecionado == 'Todos':
         periodo.extend(periodo_selecionado)
         pergunta = pergunta_selecionada
-        dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
-        selecionado = dff[pergunta]
+        lista_resposta = list(tabela[pergunta])
+        coluna = pd.DataFrame(lista_resposta, columns = [pergunta])
 
     else:
         periodo.append(periodo_selecionado)
-        print (periodo)
         pergunta = pergunta_selecionada
         dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
-        selecionado = dff[pergunta]
-    
-    return selecionado
+        lista_resposta = list(dff[pergunta])
+        coluna = pd.DataFrame(lista_resposta, columns = [pergunta])
+
+    return coluna

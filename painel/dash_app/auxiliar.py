@@ -154,30 +154,27 @@ def faixa_etaria(tabela, pergunta):
         
     pergunta_respostas[pergunta] = dicio_faixa_etaria
 
-<<<<<<< HEAD
     return pergunta_respostas
-=======
+
 def retorna_valores_grafico(pergunta, df, periodo):
-    p = pergunta[:2]
-    pizza = [2,3,4,6,9,13,17,18,19,21,22,25,26,27,31,32,36,38,39]
+    if pergunta[:2] in [2,3,4,6,9,13,17,18,19,21,22,25,26,27,31,32,36,38,39]:
+            
     
     questoes = cria_questoes(df, pergunta, periodo)
->>>>>>> 44057fbe508690d55405f2a5d828829cff70efba
 
 def filtro(periodo_selecionado, pergunta_selecionada, tabela):
     periodo = []
-    
+
     if periodo_selecionado == 'Todos':
         periodo.extend(periodo_selecionado)
         pergunta = pergunta_selecionada
         dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
-        selecionado = dff[pergunta]
-
+        selecionado = dff[pergunta].columns = [pergunta]
+        
     else:
         periodo.append(periodo_selecionado)
-        print (periodo)
         pergunta = pergunta_selecionada
         dff = tabela[tabela['3 - Qual o período em que cursa?'].isin(periodo)]
-        selecionado = dff[pergunta]
-    
+        selecionado = dff[pergunta].columns = [pergunta]
+
     return selecionado
